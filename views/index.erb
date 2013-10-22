@@ -9,5 +9,28 @@
 </head>
 <body>
     <h1>857-254-1933</h1>
+
+    <h4>SMS</h4>
+    <div>
+      <form action="/send-sms" method="post">
+        <div>
+            <textarea id="sms_body" name="sms_body" style="width: 400px; height: 200px;"></textarea>
+        </div>
+
+        <input type="submit" value="Send SMS" />
+      </form>
+    </div>
+
+    <h4>Voice</h4>
+    <div>
+      <form action="/send-voice" method="post">
+        <div>
+          <textarea id="voice_body" name="voice_body" style="width: 400px; height: 200px;"></textarea>
+        </div>
+
+        <input type="submit" value="Make Voice Call" />
+      </form>
+    </div>
+
 </body>
 </html>

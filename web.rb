@@ -9,41 +9,47 @@ get '/' do
   erb :index
 end
 
-post 'send-sms' do
+post '/send-sms' do
   client = Twilio::REST::Client.new settings.account_sid, settings.auth_token
 
   client.account.sms.messages.create(
       :from => settings.twilio_number,
       :to => settings.my_number,
-      :body => params[:body]
+      :body => params[:sms_body]
   )
+
+  redirect '/'
 end
 
-post 'send-voice' do
+post '/send-voice' do
+  @@voice_body = params[:voice_body]
+
   client = Twilio::REST::Client.new settings.account_sid, settings.auth_token
 
   client.account.calls.create(
       :from => settings.twilio_number,
       :to => settings.my_number,
-      :url => 'voice-message'
+      :url => 'http://fierce-wildwood-5399.herokuapp.com/dynamic-voice-message'
   )
+
+  redirect '/'
 end
 
-get 'dynamic-voice-message' do
+post '/dynamic-voice-message' do
   Twilio::TwiML::Response.new do |r|
-    r.Say 'Hello! Thanks for calling the Madison Tech Start app.'
+    r.Say @@voice_body
   end.text
 end
 
 get '/sms-response' do
   Twilio::TwiML::Response.new do |r|
-    r.Message "Thanks for the message! You said #{params[:body]}."
+    r.Message "Hello. Thanks for the message! You said '#{params['Body']}'."
   end.text
 end
 
 get '/voice-response' do
   Twilio::TwiML::Response.new do |r|
-    r.Say 'Hello! Thanks for calling the Madison Tech Start app.'
+    r.Say 'Hello. Thanks for calling the Madison Tech Start app! Goodbye.'
   end.text
 end
 
